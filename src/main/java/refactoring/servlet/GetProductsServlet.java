@@ -1,39 +1,36 @@
 package refactoring.servlet;
 
+import refactoring.data.Product;
+import refactoring.data.dao.ProductDao;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.io.PrintWriter;
+import java.sql.SQLException;
 
 /**
  * @author akirakozov
  */
 public class GetProductsServlet extends HttpServlet {
+    private final ProductDao productDao;
+
+    public GetProductsServlet(final ProductDao productDao) {
+        this.productDao = productDao;
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            try (Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
-                Statement stmt = c.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM PRODUCT");
-                response.getWriter().println("<html><body>");
+            PrintWriter writer = response.getWriter();
 
-                while (rs.next()) {
-                    String  name = rs.getString("name");
-                    int price  = rs.getInt("price");
-                    response.getWriter().println(name + "\t" + price + "</br>");
-                }
-                response.getWriter().println("</body></html>");
-
-                rs.close();
-                stmt.close();
-            }
-
-        } catch (Exception e) {
+            writer.println("<html><body>");
+            productDao.getProducts().stream()
+                    .map(Product::toHtml)
+                    .forEach(writer::println);
+            writer.println("</body></html>");
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 

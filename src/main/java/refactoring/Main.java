@@ -3,6 +3,8 @@ package refactoring;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import refactoring.data.dao.ProductDao;
+import refactoring.data.dao.ProductSqlDao;
 import refactoring.servlet.AddProductServlet;
 import refactoring.servlet.GetProductsServlet;
 import refactoring.servlet.QueryServlet;
@@ -33,9 +35,10 @@ public class Main {
         context.setContextPath("/");
         server.setHandler(context);
 
-        context.addServlet(new ServletHolder(new AddProductServlet()), "/add-product");
-        context.addServlet(new ServletHolder(new GetProductsServlet()),"/get-products");
-        context.addServlet(new ServletHolder(new QueryServlet()),"/query");
+        final ProductDao productDao = new ProductSqlDao();
+        context.addServlet(new ServletHolder(new AddProductServlet(productDao)), "/add-product");
+        context.addServlet(new ServletHolder(new GetProductsServlet(productDao)), "/get-products");
+        context.addServlet(new ServletHolder(new QueryServlet(productDao)), "/query");
 
         server.start();
         server.join();

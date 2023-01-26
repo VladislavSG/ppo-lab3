@@ -1,11 +1,12 @@
 package refactoring.servlet;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import refactoring.data.dao.ProductDao;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +20,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class AddProductTest {
-    private final AddProductServlet servlet = new AddProductServlet();
     private AutoCloseable closeble;
 
     @Mock
@@ -27,6 +27,13 @@ public class AddProductTest {
 
     @Mock
     private HttpServletResponse servletResponse;
+
+    @Mock
+    private ProductDao productDao;
+
+    @InjectMocks
+    private AddProductServlet servlet;
+
 
     @BeforeEach
     public void init() {
