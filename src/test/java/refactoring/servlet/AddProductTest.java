@@ -15,6 +15,7 @@ import java.io.StringWriter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class AddProductTest {
@@ -52,6 +53,9 @@ public class AddProductTest {
         servlet.doGet(servletRequest, servletResponse);
 
         printer.flush();
+
         assertTrue(stringWriter.toString().startsWith("OK"));
+        verify(servletResponse).setStatus(HttpServletResponse.SC_OK);
+        verify(servletResponse).setContentType("text/html");
     }
 }
