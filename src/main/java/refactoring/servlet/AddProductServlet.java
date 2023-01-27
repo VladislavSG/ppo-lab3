@@ -20,6 +20,7 @@ public class AddProductServlet extends AlwaysOkServlet {
         this.productDao = productDao;
     }
 
+
     @Override
     protected void process(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
@@ -27,7 +28,8 @@ public class AddProductServlet extends AlwaysOkServlet {
 
         try {
             productDao.insert(new Product(name, price));
-        } catch (SQLException e) {
+            response.getWriter().println("OK");
+        } catch (SQLException | IOException e) {
             throw new RuntimeException(e);
         }
     }

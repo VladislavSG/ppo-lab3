@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 /**
  * @author akirakozov
  */
-public class QueryServlet extends HttpServlet {
+public class QueryServlet extends AlwaysOkServlet {
     private final ProductDao productDao;
 
     public QueryServlet(final ProductDao productDao) {
@@ -67,14 +67,15 @@ public class QueryServlet extends HttpServlet {
     );
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void process(HttpServletRequest request, HttpServletResponse response) {
         String command = request.getParameter("command");
-
         HtmlBuilder builder = new HtmlBuilder();
+
         operations.getOrDefault(
                 command,
                 (b, dao) -> b.add("Unknown command: " + command)
         ).accept(builder, productDao);
+
         try {
             response.getWriter().print(builder.build());
         } catch (IOException e) {
