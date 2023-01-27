@@ -4,27 +4,17 @@ import refactoring.data.Product;
 import refactoring.data.dao.ProductDao;
 import refactoring.html.HtmlBuilder;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * @author akirakozov
  */
 public class QueryServlet extends AlwaysOkServlet {
-    private final ProductDao productDao;
-
-    public QueryServlet(final ProductDao productDao) {
-        this.productDao = productDao;
-    }
-
     private static final Map<String, BiConsumer<HtmlBuilder, ProductDao>> operations = Map.of(
             "max", (builder, dao) -> {
                 try {
@@ -65,6 +55,11 @@ public class QueryServlet extends AlwaysOkServlet {
                 }
             }
     );
+    private final ProductDao productDao;
+
+    public QueryServlet(final ProductDao productDao) {
+        this.productDao = productDao;
+    }
 
     @Override
     protected void process(HttpServletRequest request, HttpServletResponse response) {

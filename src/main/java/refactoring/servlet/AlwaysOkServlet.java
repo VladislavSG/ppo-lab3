@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public abstract class AlwaysOkServlet extends HttpServlet {
     protected abstract void process(HttpServletRequest request, HttpServletResponse response);
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         process(request, response);

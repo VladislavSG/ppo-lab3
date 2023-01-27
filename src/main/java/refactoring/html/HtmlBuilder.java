@@ -11,6 +11,7 @@ public class HtmlBuilder {
         builder.append("<h1>").append(header).append("</h1>");
         return this;
     }
+
     public HtmlBuilder add(String html) {
         builder.append(html);
         return this;
