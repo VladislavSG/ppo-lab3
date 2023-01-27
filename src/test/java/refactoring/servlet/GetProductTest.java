@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -45,7 +46,7 @@ public class GetProductTest {
     }
 
     @Test
-    public void testGetProducts() throws IOException {
+    public void testGetProducts() throws IOException, SQLException {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printer = new PrintWriter(stringWriter);
         when(servletResponse.getWriter())
@@ -57,5 +58,6 @@ public class GetProductTest {
 
         verify(servletResponse).setStatus(HttpServletResponse.SC_OK);
         verify(servletResponse).setContentType("text/html");
+        verify(productDao).getProducts();
     }
 }

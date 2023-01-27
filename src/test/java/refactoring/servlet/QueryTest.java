@@ -55,10 +55,10 @@ public class QueryTest {
                 .thenReturn(printer);
 
         servlet.doGet(servletRequest, servletResponse);
+        printer.flush();
+        assertTrue(Utils.checkHtml(stringWriter.toString()));
 
         verify(servletResponse).setStatus(HttpServletResponse.SC_OK);
         verify(servletResponse).setContentType("text/html");
-        printer.flush();
-        assertTrue(Utils.checkHtml(stringWriter.toString()));
     }
 }

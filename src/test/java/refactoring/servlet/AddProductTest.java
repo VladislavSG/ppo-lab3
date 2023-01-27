@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import refactoring.data.Product;
 import refactoring.data.dao.ProductDao;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -46,7 +48,7 @@ public class AddProductTest {
     }
 
     @Test
-    public void testAddProduct() throws IOException {
+    public void testAddProduct() throws IOException, SQLException {
         when(servletRequest.getParameter("name"))
                 .thenReturn("honor 10");
         when(servletRequest.getParameter("price"))
@@ -64,5 +66,6 @@ public class AddProductTest {
         assertTrue(stringWriter.toString().startsWith("OK"));
         verify(servletResponse).setStatus(HttpServletResponse.SC_OK);
         verify(servletResponse).setContentType("text/html");
+        verify(productDao).insert(new Product("honor 10", 30000));
     }
 }
