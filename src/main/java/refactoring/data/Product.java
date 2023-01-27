@@ -20,8 +20,8 @@ public class Product {
         return price;
     }
 
-    public String toHtml() {
-        return name + "\t" + price + "</br>";
+    public String toSimpleString() {
+        return name + "\t" + price;
     }
 
     @Override
