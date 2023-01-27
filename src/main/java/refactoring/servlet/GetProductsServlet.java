@@ -15,7 +15,7 @@ import java.sql.SQLException;
 /**
  * @author akirakozov
  */
-public class GetProductsServlet extends HttpServlet {
+public class GetProductsServlet extends AlwaysOkServlet {
     private final ProductDao productDao;
 
     public GetProductsServlet(final ProductDao productDao) {
@@ -23,18 +23,15 @@ public class GetProductsServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void process(HttpServletRequest request, HttpServletResponse response) {
         try {
             HtmlBuilder builder = new HtmlBuilder();
             productDao.getProducts().stream()
                     .map(Product::toSimpleString)
                     .forEach(builder::addLine);
             response.getWriter().print(builder.build());
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             throw new RuntimeException(e);
         }
-
-        response.setContentType("text/html");
-        response.setStatus(HttpServletResponse.SC_OK);
     }
 }

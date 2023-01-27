@@ -13,16 +13,15 @@ import java.sql.SQLException;
 /**
  * @author akirakozov
  */
-public class AddProductServlet extends HttpServlet {
+public class AddProductServlet extends AlwaysOkServlet {
     private final ProductDao productDao;
 
     public AddProductServlet(final ProductDao productDao) {
         this.productDao = productDao;
     }
 
-
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void process(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
         long price = Long.parseLong(request.getParameter("price"));
 
@@ -31,9 +30,5 @@ public class AddProductServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        response.setContentType("text/html");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println("OK");
     }
 }

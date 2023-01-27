@@ -67,22 +67,19 @@ public class QueryServlet extends HttpServlet {
     );
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         String command = request.getParameter("command");
-        if (command == null) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
 
         HtmlBuilder builder = new HtmlBuilder();
         operations.getOrDefault(
                 command,
                 (b, dao) -> b.add("Unknown command: " + command)
         ).accept(builder, productDao);
-        response.getWriter().print(builder.build());
-
-        response.setContentType("text/html");
-        response.setStatus(HttpServletResponse.SC_OK);
+        try {
+            response.getWriter().print(builder.build());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
